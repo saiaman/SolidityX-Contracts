@@ -139,13 +139,11 @@ contract QRC20 is QMultiChain, IQRC20 {
 
     * You must send a value with the function call equal to the following amount: (baseFee + minerTip) * gasLimit
     */
-    function crossChainTransfer(
+    function _crossChainTransfer(
+        address from,
         address to,
-        uint256 amount,
-        uint256 gasLimit,
-        uint256 minerTip,
-        uint256 baseFee
-    ) public payable {
+        uint256 amount
+    ) internal {
         bool isInternal;
         assembly {
             isInternal := isaddrinternal(to)
@@ -157,8 +155,8 @@ contract QRC20 is QMultiChain, IQRC20 {
             amount
         );
         if (_callCrossChain("encoded", getAddressLocation(to))) {
-            emit ExternalTransfer(msg.sender, to, amount);
-            _burn(msg.sender, amount);
+            emit ExternalTransfer(from, to, amount);
+            _burn(from, amount);
         }
     }
 
@@ -299,18 +297,8 @@ contract QRC20 is QMultiChain, IQRC20 {
      * - `from` must have a balance of at least `amount`.
      */
     function _transfer(address from, address to, uint256 amount) internal {
-        bool isInternal;
-        assembly {
-            isInternal := isaddrinternal(to) // This opcode returns true if an address is internal
-        }
-        require(
-            isInternal,
-            "Address is external. Use cross-chain transfer function."
-        );
-
         require(from != address(0), "ERC20: transfer from the zero address");
         require(to != address(0), "ERC20: transfer to the zero address");
-
         _beforeTokenTransfer(from, to, amount);
 
         uint256 fromBalance = _balances[from];
@@ -318,14 +306,22 @@ contract QRC20 is QMultiChain, IQRC20 {
             fromBalance >= amount,
             "ERC20: transfer amount exceeds balance"
         );
-        unchecked {
-            _balances[from] = fromBalance - amount;
-            // Overflow not possible: the sum of all balances is capped by totalSupply, and the sum is preserved by
-            // decrementing then incrementing.
-            _balances[to] += amount;
-        }
 
-        emit Transfer(from, to, amount);
+        bool isInternal;
+        assembly {
+            isInternal := isaddrinternal(to) // This opcode returns true if an address is internal
+        }
+        if (isInternal) {
+            unchecked {
+                _balances[from] = fromBalance - amount;
+                // Overflow not possible: the sum of all balances is capped by totalSupply, and the sum is preserved by
+                // decrementing then incrementing.
+                _balances[to] += amount;
+            }
+            emit Transfer(from, to, amount);
+        } else {
+            _crossChainTransfer(from, to, amount);
+        }
 
         _afterTokenTransfer(from, to, amount);
     }

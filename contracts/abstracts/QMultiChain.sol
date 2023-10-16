@@ -44,7 +44,7 @@ abstract contract QMultiChain is Ownable {
                 0, // temp variable, can be anything (unused)
                 toAddr, // address to send to
                 0, // amount to send in wei
-                msg.gasleft, // gas limit (entire gas limit will be consumed and sent to destination)
+                msg.gas, // gas limit (entire gas limit will be consumed and sent to destination)
                 1, // miner tip in wei
                 1, // base fee in wei
                 add(payload, 0x20), // input offset in memory (the first 32 byte number is just the size of the array)
