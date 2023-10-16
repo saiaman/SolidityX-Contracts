@@ -29,6 +29,33 @@ abstract contract QMultiChain is Ownable {
         Ranges[8] = Range(228, 255); // zone 2-2 // hydra3
     }
 
+    function _callCrossChain(
+        bytes memory payload,
+        uint8 destination
+    ) internal returns (bool) {
+        address toAddr = ApprovedAddresses[destination];
+        require(
+            toAddr != address(0),
+            "Contract is not available on destination chain"
+        );
+        bool success; // this is not used. opETX only returns false if there was an error in creating the ETX, not executing it.
+        assembly {
+            success := etx(
+                0, // temp variable, can be anything (unused)
+                toAddr, // address to send to
+                0, // amount to send in wei
+                msg.gasleft, // gas limit (entire gas limit will be consumed and sent to destination)
+                1, // miner tip in wei
+                1, // base fee in wei
+                add(payload, 0x20), // input offset in memory (the first 32 byte number is just the size of the array)
+                mload(payload), // input size in memory (loading the first number gives the size)
+                0, // accesslist offset in memory
+                0 // accesslist size in memory
+            )
+        }
+        return success;
+    }
+
     function getAddressLocation(address addr) internal view returns (uint8) {
         uint8 prefix = uint8(toBytes(addr)[0]);
         for (uint8 i = 0; i < 9; i++) {

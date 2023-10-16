@@ -151,45 +151,15 @@ contract QRC20 is QMultiChain, IQRC20 {
             isInternal := isaddrinternal(to)
         }
         require(!isInternal, "Address is not external");
-
-        _burn(msg.sender, amount);
-        address toAddr = ApprovedAddresses[getAddressLocation(to)];
-        require(
-            toAddr != address(0),
-            "Token is not available on the destination chain"
-        );
-        uint totalGas = (baseFee + minerTip) * gasLimit;
-        require(
-            msg.value >= totalGas,
-            string(
-                abi.encodePacked(
-                    "Not enough gas sent, need at least ",
-                    uint2str(totalGas),
-                    " wei"
-                )
-            )
-        );
         bytes memory encoded = abi.encodeWithSignature(
             "incomingTransfer(address,uint256)",
             to,
             amount
         );
-        bool success; // this is not used. opETX only returns false if there was an error in creating the ETX, not executing it.
-        assembly {
-            success := etx(
-                0, // temp variable, can be anything (unused)
-                toAddr, // address to send to
-                0, // amount to send in wei
-                gasLimit, // gas limit (entire gas limit will be consumed and sent to destination)
-                minerTip, // miner tip in wei
-                baseFee, // base fee in wei
-                add(encoded, 0x20), // input offset in memory (the first 32 byte number is just the size of the array)
-                mload(encoded), // input size in memory (loading the first number gives the size)
-                0, // accesslist offset in memory
-                0 // accesslist size in memory
-            )
+        if (_callCrossChain("encoded", getAddressLocation(to))) {
+            emit ExternalTransfer(msg.sender, to, amount);
+            _burn(msg.sender, amount);
         }
-        emit ExternalTransfer(msg.sender, to, amount);
     }
 
     /**
