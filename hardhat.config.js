@@ -3,6 +3,7 @@
  */
 
 require("@nomicfoundation/hardhat-toolbox");
+require("@openzeppelin/hardhat-upgrades");
 const dotenv = require("dotenv");
 dotenv.config({ path: ".env" });
 
@@ -63,6 +64,12 @@ module.exports = {
     compilers: [
       {
         version: "0.8.0",
+      },
+      {
+        version: "0.8.1",
+      },
+      {
+        version: "0.8.2",
       },
     ],
   },

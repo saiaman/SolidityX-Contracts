@@ -17,20 +17,23 @@ describe("Token contract", function () {
     token = await Token.deploy(
       "Sample QRC20",
       "QRC2",
-      ethers.parseEther("1000")
+      ethers.utils.parseEther("1000")
     );
+
     [owner, buyer] = await ethers.getSigners();
   });
 
   describe("Deployment", function () {
     it("Should set the right owner", async function () {
       expect(await token.balanceOf(owner.address)).to.equal(
-        ethers.parseEther("1000")
+        ethers.utils.parseEther("1000")
       );
     });
 
     it("Should set the total supply", async function () {
-      expect(await token.totalSupply()).to.equal(ethers.parseEther("1000"));
+      expect(await token.totalSupply()).to.equal(
+        ethers.utils.parseEther("1000")
+      );
     });
   });
 

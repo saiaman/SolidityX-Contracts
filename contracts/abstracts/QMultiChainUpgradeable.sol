@@ -2,9 +2,9 @@
 
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
-abstract contract QMultiChain is Ownable {
+abstract contract QMultiChainUpgradeable is OwnableUpgradeable {
     // List of external token contracts that can send tokens to users on this chain
     address[12] public ApprovedAddresses;
 
@@ -17,7 +17,7 @@ abstract contract QMultiChain is Ownable {
     // List of address prefix ranges (for checking which chain an address belongs to)
     Range[13] public Ranges;
 
-    constructor() {
+    function initialize() public onlyInitializing {
         Ranges[0] = Range(0, 29); // zone 0-0 // cyprus1
         Ranges[1] = Range(30, 58); // zone 0-1 // cyprus2
         Ranges[2] = Range(59, 87); // zone 0-2 // cyprus3
@@ -27,6 +27,7 @@ abstract contract QMultiChain is Ownable {
         Ranges[6] = Range(172, 199); // zone 2-0 // hydra1
         Ranges[7] = Range(200, 227); // zone 2-1 // hydra2
         Ranges[8] = Range(228, 255); // zone 2-2 // hydra3
+        __Ownable_init();
     }
 
     function _callCrossChain(

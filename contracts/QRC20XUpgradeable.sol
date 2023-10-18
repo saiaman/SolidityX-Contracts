@@ -3,7 +3,7 @@
 pragma solidity ^0.8.0; // Note: You must have a version of SolidityX to compile this contract.
 
 import "./interfaces/IQRC20.sol";
-import "./abstracts/QMultiChain.sol";
+import "./abstracts/QMultiChainUpgradeable.sol";
 
 /**
  * @dev Implementation of the {IERC20} interface for cross-chain transfers.
@@ -26,7 +26,7 @@ import "./abstracts/QMultiChain.sol";
  * functions have been added to mitigate the well-known issues around setting
  * allowances. See {IERC20-approve}.
  */
-contract QRC20 is QMultiChain, IQRC20 {
+contract QRC20XUpgradeable is QMultiChainUpgradeable, IQRC20 {
     mapping(address => uint256) private _balances;
 
     mapping(address => mapping(address => uint256)) private _allowances;
@@ -52,11 +52,22 @@ contract QRC20 is QMultiChain, IQRC20 {
      * All two of these values are immutable: they can only be set once during
      * construction.
      */
-    constructor(
+    // constructor(
+    //     string memory __name,
+    //     string memory __symbol,
+    //     uint256 __totalSupply
+    // ) {
+    //     _name = __name;
+    //     _symbol = __symbol;
+    //     _deployer = msg.sender;
+    //     _mint(_deployer, __totalSupply);
+    // }
+
+    function initialize(
         string memory __name,
         string memory __symbol,
         uint256 __totalSupply
-    ) {
+    ) public onlyInitializing {
         _name = __name;
         _symbol = __symbol;
         _deployer = msg.sender;

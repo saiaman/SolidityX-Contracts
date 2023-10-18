@@ -1,5 +1,6 @@
 const quais = require("quais");
 const hre = require("hardhat");
+const { upgrades } = require("hardhat");
 
 async function main() {
   const ethersContract = await hre.ethers.getContractFactory("QRC20");
@@ -19,6 +20,13 @@ async function main() {
     ethersContract.bytecode,
     walletWithProvider
   );
+
+  const instance = await upgrades.deployProxy(QuaisContract, [
+    "Saiaman01",
+    "SAIA",
+    quais.utils.parseEther("1000"),
+  ]);
+  await instance.waitForDeployment();
 
   const quaisContract = await QuaisContract.deploy(
     "Saiaman01",
