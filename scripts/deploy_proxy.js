@@ -17,30 +17,11 @@ async function main() {
   );
   await quaisProvider.ready;
 
-  const QuaisContract = new quais.ContractFactory(
-    ethersContract.interface.fragments,
-    ethersContract.bytecode,
-    walletWithProvider
-  );
-
-  const quaisContract = await QuaisContract.deploy({
-    gasLimit: 5000000,
-  });
-
-  // Use quais-polling shim to wait for contract to be deployed
-  const deployReceipt = await pollFor(
-    quaisProvider, // provider passed to poller
-    "getTransactionReceipt", // method to call on provider
-    [quaisContract.deployTransaction.hash], // params to pass to method
-    1.5, // initial polling interval in seconds
-    1, // request timeout in seconds,
-    600
-  );
-
-  console.log("Contract deployed to address: ", deployReceipt.contractAddress);
+  const currentContractAddress = "0x92d1859D4E37E6d6A8d0f0A50715236879F54CA8";
 
   const proxyContract = await hre.ethers.getContractFactory("QProxy");
-  console.log(proxyContract);
+  // console.log(proxyContract.interface.fragments[0].inputs);
+  // process.exit();
   const ProxyContractFactory = new quais.ContractFactory(
     proxyContract.interface.fragments,
     proxyContract.bytecode,
@@ -48,7 +29,8 @@ async function main() {
   );
 
   const ProxyContract = await ProxyContractFactory.deploy(
-    deployReceipt.contractAddress,
+    currentContractAddress,
+    "0x",
     {
       gasLimit: 5000000,
     }
@@ -67,6 +49,8 @@ async function main() {
     "Proxy Contract deployed to address: ",
     proxyDeployReceipt.contractAddress
   );
+
+  ProxyContract.attach(proxyDeployReceipt.contractAddress);
 
   await ProxyContract.initialize(
     "Saiaman01",
