@@ -21,9 +21,14 @@ async function main() {
     walletWithProvider
   );
 
-  const quaisContract = await QuaisContract.deploy("Saiaman's NFT", "SAI", {
-    gasLimit: 5000000,
-  });
+  const quaisContract = await QuaisContract.deploy(
+    "BoredApeYachtClub",
+    "BAYC",
+    "ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/",
+    {
+      gasLimit: 5000000,
+    }
+  );
 
   // Use quais-polling shim to wait for contract to be deployed
   const deployReceipt = await pollFor(
