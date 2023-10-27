@@ -3,10 +3,11 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "../interfaces/IQMultiChain.sol";
 
 abstract contract QMultiChain is Ownable {
     // List of external token contracts that can send tokens to users on this chain
-    address[12] public ApprovedAddresses;
+    address[12] private ApprovedAddresses;
 
     // Address prefix range
     struct Range {
@@ -29,11 +30,57 @@ abstract contract QMultiChain is Ownable {
         Ranges[8] = Range(228, 255); // zone 2-2 // hydra3
     }
 
+    modifier _senderIsAuthorized() {
+        require(
+            getApprovedAddressForSender(msg.sender) == msg.sender,
+            string(
+                abi.encodePacked(
+                    "Sender ",
+                    abi.encodePacked(msg.sender),
+                    " not approved"
+                )
+            )
+        );
+        _;
+    }
+
+    modifier _destinationIsApproved(uint8 destination) {
+        address toAddr = getAddressForDestination(destination);
+        require(
+            toAddr != address(0),
+            "Contract is not available on destination chain"
+        );
+        _;
+    }
+
+    modifier requireInternal(address addr) {
+        require(!_isInternal(addr), "Address is not external");
+        _;
+    }
+
+    function _isInternal(address addr) internal pure returns (bool isInternal) {
+        assembly {
+            isInternal := isaddrinternal(addr)
+        }
+    }
+
+    function getApprovedAddressForSender(
+        address sender
+    ) internal view returns (address) {
+        return ApprovedAddresses[getAddressLocation(sender)];
+    }
+
+    function getAddressForDestination(
+        uint8 destination
+    ) internal view returns (address) {
+        return ApprovedAddresses[destination];
+    }
+
     function _callCrossChain(
         bytes memory payload,
         uint8 destination,
         uint256 _gasLeft
-    ) internal returns (bool) {
+    ) internal _destinationIsApproved(destination) returns (bool) {
         address toAddr = ApprovedAddresses[destination];
         require(
             toAddr != address(0),
@@ -67,12 +114,10 @@ abstract contract QMultiChain is Ownable {
         revert("Invalid Location");
     }
 
-    function AddApprovedAddress(uint8 chain, address addr) public onlyOwner {
-        bool isInternal;
-        assembly {
-            isInternal := isaddrinternal(addr)
-        }
-        require(!isInternal, "Address is not external");
+    function AddApprovedAddress(
+        uint8 chain,
+        address addr
+    ) external onlyOwner requireInternal(addr) {
         require(chain < 9, "Max 9 zones");
         require(
             ApprovedAddresses[chain] == address(0),
