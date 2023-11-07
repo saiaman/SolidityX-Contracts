@@ -1,0 +1,20 @@
+{
+  "name": "Dev Container for quai",
+  "context": "..",
+  "dockerFile": "./Dockerfile",
+  "settings": {},
+  "extensions": [],
+  "postCreateCommand": "mkdir -p ~/.ssh && cp -r ~/.ssh-localhost/* ~/.ssh && chmod 700 ~/.ssh && chmod 600 ~/.ssh/*",
+  "runArgs": [
+    "-v",
+    "${localEnv:HOME}${env:USERPROFILE}/.ssh:/root/.ssh-localhost:ro",
+    "-v",
+    "${localEnv:HOME}${env:USERPROFILE}/.aws:/root/.aws",
+    "-v",
+    "${localEnv:HOME}${env:USERPROFILE}/.gitconfig:/root/.gitconfig",
+    "-v",
+    "${localEnv:HOME}${env:USERPROFILE}/.git-credentials:/root/.git-credentials",
+    "-v",
+    "${localEnv:HOME}${env:USERPROFILE}/.config:/root/.config"
+  ]
+}

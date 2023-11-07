@@ -3,6 +3,7 @@
  */
 
 require("@nomicfoundation/hardhat-toolbox");
+require("./scripts/nft/mint");
 
 const dotenv = require("dotenv");
 dotenv.config({ path: ".env" });
