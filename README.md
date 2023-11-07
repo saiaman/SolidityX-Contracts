@@ -36,4 +36,12 @@ npx harhat deploy_ERC721 (--network YOUR_SELECTED_NETWORK ) YourNFTCollectionNam
 npx harhat deploy_ERC721 ERC721_Test E721T "ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/"
 ```
 
+## Mint a nft ?
+
+Ok, you have a smart contract for NFT's .... but how to mint ????
+
+```shell
+npx harhat mint_ERC721 (--network YOUR_SELECTED_NETWORK ) YourNFTContractAddress DestinationAddress
+```
+
 # More documentation to come, be patient :)

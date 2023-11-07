@@ -40,7 +40,7 @@ async function mintNft(contractAddress, destinationAddress, hre) {
     1, // request timeout in seconds,
     600
   );
-  console.log("Contract deployed to address: ", deployReceipt.contractAddress);
+  console.log("Successfully minted ");
 }
 
 task("mint_ERC721", "Mints a NFT to a wallet")
