@@ -28,6 +28,7 @@
     "@typechain/hardhat": "^8.0.3",
     "@types/chai": "^4.3.9",
     "@types/mocha": "^10.0.3",
+    "bluebird": "^3.7.2",
     "chai": "^4.3.10",
     "child_process": "^1.0.2",
     "dotenv": "^16.0.1",
