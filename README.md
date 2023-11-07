@@ -1,8 +1,4 @@
-# Sample Hardhat Project
-
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
-
-Try running some of the following tasks:
+# Quai Hardhat With abstract contracts and QRC's factory
 
 ```shell
 npx hardhat help
@@ -11,3 +7,19 @@ REPORT_GAS=true npx hardhat test
 npx hardhat node
 npx hardhat run scripts/deploy.js
 ```
+
+# Quick tasks too help all you need
+
+## Deploy a QRC20 ?
+
+```shell
+npx harhat deploy_ERC20 (--network YOUR_SELECTED_NETWORK ) YourTokenFullName YourTokenACRONYM YourTokenSupply
+```
+
+**for example**
+
+```shell
+npx harhat deploy_ERC20 Erc20_Test TERC20 1000000000
+```
+
+# More documentation to come, be patient :)
