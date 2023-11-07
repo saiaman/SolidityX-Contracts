@@ -37,6 +37,7 @@ async function deployERC20(name, token, supply, hre) {
     1, // request timeout in seconds,
     600
   );
+  console.log(deployReceipt.cumulativeGasUsed);
   console.log("Contract deployed to address: ", deployReceipt.contractAddress);
 }
 

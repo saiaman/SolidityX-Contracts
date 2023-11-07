@@ -19,9 +19,9 @@ async function deployERC20_onChain(name, token, supply, chain, hre) {
   const run = await spawn(
     "npx",
     ["hardhat", "deploy_ERC20", "--network", chain, name, token, supply],
-    {}
+    { stdio: "inherit" }
   );
-  console.log("result", run.stdout);
+  console.log("log final", run.stdout);
   // return stdout;
   return;
 }
