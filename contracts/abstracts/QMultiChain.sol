@@ -115,10 +115,13 @@ abstract contract QMultiChain is Ownable {
     }
 
     function AddApprovedAddress(
-        uint8 chain,
         address addr
     ) external onlyOwner requireInternal(addr) {
-        require(chain < 9, "Max 9 zones");
+        uint8 chain = getAddressLocation(addr);
+        require(
+            chain != getAddressLocation(address(this)) && addr != address(this),
+            "This address is internal and not the current one"
+        );
         require(
             ApprovedAddresses[chain] == address(0),
             "The approved address for this zone already exists"
@@ -126,21 +129,9 @@ abstract contract QMultiChain is Ownable {
         ApprovedAddresses[chain] = addr;
     }
 
-    function AddApprovedAddresses(
-        uint8[] calldata chain,
-        address[] calldata addr
-    ) external onlyOwner {
-        require(
-            chain.length == addr.length,
-            "chain and address arrays must be the same length"
-        );
-        for (uint8 i = 0; i < chain.length; i++) {
-            require(chain[i] < 9, "Max 9 zones");
-            require(
-                ApprovedAddresses[chain[i]] == address(0),
-                "The approved address for this zone already exists"
-            );
-            ApprovedAddresses[chain[i]] = addr[i];
+    function AddApprovedAddresses(address[] calldata addr) external onlyOwner {
+        for (uint8 i = 0; i < addr.length; i++) {
+            this.AddApprovedAddress(addr[i]);
         }
     }
 
