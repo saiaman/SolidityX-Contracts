@@ -15,7 +15,7 @@ module.exports = {
   defaultNetwork: "cyprus1",
   networks: {
     cyprus1: {
-      url: process.env.CYPRUS1URL.toString(),
+      url: process.env.CYPRUS1URL,
       accounts: [process.env.CYPRUS1PK],
       chainId: chainId,
     },
