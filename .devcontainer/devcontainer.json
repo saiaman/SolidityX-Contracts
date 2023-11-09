@@ -1,0 +1,22 @@
+{
+  "name": "Dev Container for quai By saiaman01.eth",
+  "image": "saiaman01/quai-vscode-container:latest",
+  "settings": {},
+  "extensions": [
+    "JuanBlanco.solidity",
+    "hosho.solidity-debugger"
+  ],
+  "postCreateCommand": "mkdir -p ~/.ssh && cp -r ~/.ssh-localhost/* ~/.ssh && chmod 700 ~/.ssh && chmod 600 ~/.ssh/* && sh /link_all_versions.sh",
+  "runArgs": [
+    "-v",
+    "${localEnv:HOME}${env:USERPROFILE}/.ssh:/root/.ssh-localhost:ro",
+    "-v",
+    "${localEnv:HOME}${env:USERPROFILE}/.aws:/root/.aws",
+    "-v",
+    "${localEnv:HOME}${env:USERPROFILE}/.gitconfig:/root/.gitconfig",
+    "-v",
+    "${localEnv:HOME}${env:USERPROFILE}/.git-credentials:/root/.git-credentials",
+    "-v",
+    "${localEnv:HOME}${env:USERPROFILE}/.config:/root/.config"
+  ]
+}
