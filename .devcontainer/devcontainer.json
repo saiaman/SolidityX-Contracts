@@ -1,10 +1,12 @@
 {
-  "name": "Dev Container for quai",
-  "context": "..",
-  "dockerFile": "./Dockerfile",
+  "name": "Dev Container for quai By saiaman01.eth",
+  "image": "saiaman01/quai-vscode-container:latest",
   "settings": {},
-  "extensions": [],
-  "postCreateCommand": "mkdir -p ~/.ssh && cp -r ~/.ssh-localhost/* ~/.ssh && chmod 700 ~/.ssh && chmod 600 ~/.ssh/*",
+  "extensions": [
+    "JuanBlanco.solidity",
+    "hosho.solidity-debugger"
+  ],
+  "postCreateCommand": "mkdir -p ~/.ssh && cp -r ~/.ssh-localhost/* ~/.ssh && chmod 700 ~/.ssh && chmod 600 ~/.ssh/* && sh /link_all_versions.sh",
   "runArgs": [
     "-v",
     "${localEnv:HOME}${env:USERPROFILE}/.ssh:/root/.ssh-localhost:ro",

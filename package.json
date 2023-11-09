@@ -32,7 +32,7 @@
     "chai": "^4.3.10",
     "child_process": "^1.0.2",
     "dotenv": "^16.0.1",
-    "hardhat": "github:dominant-strategies/quai-hardhat",
+    "hardhat": "^2.19.0",
     "hardhat-gas-reporter": "^1.0.9",
     "quais": "^0.1.14",
     "quais-polling": "^1.0.1",
