@@ -1,6 +1,6 @@
 {
   "name": "Dev Container for quai By saiaman01.eth",
-  "image": "saiaman01/quai-vscode-container:latest",
+  "image": "saiaman01/quai-vscode-container@sha256:aeb5d1e4e42755de596fd5038fb487f7fe62110cbf5b3c78fb872133ef9ced59",
   "settings": {},
   "extensions": ["JuanBlanco.solidity", "hosho.solidity-debugger"],
   "postCreateCommand": "sh /link_all_versions.sh",
