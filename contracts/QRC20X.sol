@@ -30,6 +30,7 @@ contract QRC20 is QMultiChain, ERC20 {
         uint256 __totalSupply
     ) ERC20(__name, __symbol) {
         _mint(msg.sender, __totalSupply);
+        //some comment
     }
 
     /**

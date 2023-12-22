@@ -3,6 +3,7 @@
  */
 
 require("@nomicfoundation/hardhat-toolbox");
+require("quai-hardhat-plugin");
 require("./scripts/nft/mint");
 require("./tasks");
 
@@ -61,6 +62,11 @@ module.exports = {
     },
   },
 
+  // solidityx: { compilerPath: "/SolidityX/build/solc/solc" }, ///usr/bin/solc in case you are in devContainer
+  solidityx: {
+    compilerPath:
+      "/Users/ruialbuquerque/Library/Caches/hardhat-nodejs/compilers-v2/macosx-amd64/solc-osx",
+  }, // on my osx
   // change compiler version based on version defined in your smart contract
   solidity: {
     compilers: [
@@ -91,16 +97,13 @@ module.exports = {
           },
         },
       },
-      {
-        version: "0.8.17",
-        settings: {
-          optimizer: {
-            enabled: true,
-            runs: 1000,
-          },
-        },
-      },
     ],
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 1000,
+      },
+    },
   },
 
   paths: {

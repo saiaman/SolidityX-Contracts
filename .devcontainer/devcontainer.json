@@ -3,6 +3,5 @@
   "image": "saiaman01/quai-vscode-container:latest",
   "settings": {},
   "extensions": ["JuanBlanco.solidity", "hosho.solidity-debugger"],
-  "postCreateCommand": "sh /link_all_versions.sh",
   "runArgs": []
 }
