@@ -10,3 +10,4 @@ cache
 artifacts
 .openzeppelin
 solc-osx
+package-lock.json
