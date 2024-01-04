@@ -64,6 +64,10 @@ abstract contract QMultiChain is Ownable {
         }
     }
 
+    function isInternal(address sender) internal view returns (bool) {
+        return getAddressLocation(sender) == getAddressLocation(address(this));
+    }
+
     function getApprovedAddressForSender(
         address sender
     ) internal view returns (address) {
